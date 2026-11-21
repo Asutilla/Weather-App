@@ -1,10 +1,11 @@
 # Weather App
 
-A modern Android weather app built with Jetpack Compose and Material 3. It displays real-time weather conditions for New York City using the [OpenWeatherMap](https://openweathermap.org/api) API.
+A modern, high-performance Android weather app built with Jetpack Compose and Material 3. It displays real-time weather conditions for **any city worldwide** using the [OpenWeatherMap](https://openweathermap.org/api) API.
 
 ## Features
 
-- **Real-Time Weather Data**: Displays current city name, main weather condition (e.g. Clear, Clouds, Rain), and detailed description (e.g. clear sky, broken clouds).
+- **Global Location Search**: Instantly search and switch between cities worldwide using the search action in the top app bar.
+- **Real-Time Weather Data**: Displays current city name, temperature, main weather condition (e.g. Clear, Clouds, Rain), and detailed description (e.g. clear sky, broken clouds).
 - **Vibrant Weather Icons**: Network-loaded high-resolution weather graphics via Glide (`@4x` resolution) paired with clear Material Vector icon fallbacks (e.g. bright golden sun for clear day, crescent moon for clear night).
 - **Lifecycle-Aware Polling**: Auto-refreshes current weather every 60 seconds while the app is in the foreground and automatically pauses when stopped to conserve battery and API quota.
 - **Robust Error Handling**: Handles network disconnections, invalid/missing API keys (HTTP 401), missing city (HTTP 404), and server failures with user-friendly retry actions.
@@ -85,9 +86,9 @@ app/src/main/java/com/example/newyorkweather/
 │   ├── WeatherApi.kt        # Retrofit interface & WeatherApiClient singleton
 │   └── WeatherResponse.kt   # Moshi JSON data models (WeatherResponse, Weather, Main, Coord)
 └── ui/
-    ├── WeatherScreen.kt     # Compose screen UI & WeatherIcon (Glide + vector fallback)
+    ├── WeatherScreen.kt     # Compose screen UI, search dialog & WeatherIcon
     ├── WeatherUiState.kt    # UI State definition & WeatherError enum
-    ├── WeatherViewModel.kt  # StateFlow management & polling loop
+    ├── WeatherViewModel.kt  # StateFlow management, city search & polling loop
     └── theme/               # Material 3 colors, typography & theme definitions
 ```
 
@@ -96,5 +97,3 @@ app/src/main/java/com/example/newyorkweather/
 - API keys are injected via `local.properties` or environment variables at build time and injected into `BuildConfig.OPENWEATHER_API_KEY`.
 - Never commit `local.properties`, `.env` files, or signing keys to Git.
 - If an API key is accidentally exposed, revoke it immediately at [home.openweathermap.org/api_keys](https://home.openweathermap.org/api_keys).
-
-For further details on security guidelines and secret scanning, see [SECURITY.md](SECURITY.md).
