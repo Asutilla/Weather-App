@@ -36,6 +36,7 @@ class MainActivity : ComponentActivity() {
                 WeatherScreen(
                     uiState = uiState,
                     onRetry = viewModel::refreshNow,
+                    onCitySelected = viewModel::setCity,
                 )
             }
         }

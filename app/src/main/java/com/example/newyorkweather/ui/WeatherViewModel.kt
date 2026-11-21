@@ -35,6 +35,19 @@ class WeatherViewModel : ViewModel() {
 
     private var pollingJob: Job? = null
 
+    var city: String = CITY
+        private set
+
+    fun setCity(newCity: String) {
+        val trimmed = newCity.trim()
+        if (trimmed.isBlank() || trimmed == city) return
+        city = trimmed
+        _uiState.value = WeatherUiState.Loading
+        viewModelScope.launch {
+            refresh()
+        }
+    }
+
     /** Starts the polling loop. Safe to call repeatedly. */
     fun startPolling() {
         if (pollingJob?.isActive == true) return
@@ -77,7 +90,7 @@ class WeatherViewModel : ViewModel() {
 
         try {
             val weather = WeatherApiClient.api.getCurrentWeather(
-                city = CITY,
+                city = city,
                 apiKey = apiKey,
             )
             _uiState.value = WeatherUiState.Success(

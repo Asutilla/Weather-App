@@ -14,23 +14,30 @@ import androidx.compose.material.icons.filled.AcUnit
 import androidx.compose.material.icons.filled.Cloud
 import androidx.compose.material.icons.filled.Dehaze
 import androidx.compose.material.icons.filled.NightsStay
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Thunderstorm
 import androidx.compose.material.icons.filled.WaterDrop
 import androidx.compose.material.icons.filled.WbCloudy
 import androidx.compose.material.icons.filled.WbSunny
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -62,16 +69,30 @@ private const val ICON_BASE_URL = "https://openweathermap.org/img/wn/"
 fun WeatherScreen(
     uiState: WeatherUiState,
     onRetry: () -> Unit,
+    onCitySelected: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    var showSearchDialog by remember { mutableStateOf(false) }
+    var cityInput by remember { mutableStateOf("") }
+
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = {
             TopAppBar(
                 title = { Text(stringResource(R.string.app_name)) },
+                actions = {
+                    IconButton(onClick = { showSearchDialog = true }) {
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = "Search City",
+                            tint = MaterialTheme.colorScheme.onPrimary,
+                        )
+                    }
+                },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary,
                     titleContentColor = MaterialTheme.colorScheme.onPrimary,
+                    actionIconContentColor = MaterialTheme.colorScheme.onPrimary,
                 ),
             )
         },
@@ -100,6 +121,39 @@ fun WeatherScreen(
                 )
             }
         }
+    }
+
+    if (showSearchDialog) {
+        AlertDialog(
+            onDismissRequest = { showSearchDialog = false },
+            title = { Text("Search City") },
+            text = {
+                OutlinedTextField(
+                    value = cityInput,
+                    onValueChange = { cityInput = it },
+                    label = { Text("City name") },
+                    singleLine = true,
+                )
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        if (cityInput.isNotBlank()) {
+                            onCitySelected(cityInput)
+                            cityInput = ""
+                            showSearchDialog = false
+                        }
+                    }
+                ) {
+                    Text("Search")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showSearchDialog = false }) {
+                    Text("Cancel")
+                }
+            },
+        )
     }
 }
 
@@ -316,7 +370,7 @@ private val previewCloudyWeather = WeatherResponse(
 @Composable
 private fun WeatherScreenClearSkyPreview() {
     NewYorkWeatherTheme(dynamicColor = false) {
-        WeatherScreen(uiState = WeatherUiState.Success(previewClearWeather, fetchedAt = 1732123456000L), onRetry = {})
+        WeatherScreen(uiState = WeatherUiState.Success(previewClearWeather, fetchedAt = 1732123456000L), onRetry = {}, onCitySelected = {})
     }
 }
 
@@ -324,7 +378,7 @@ private fun WeatherScreenClearSkyPreview() {
 @Composable
 private fun WeatherScreenCloudyPreview() {
     NewYorkWeatherTheme(dynamicColor = false) {
-        WeatherScreen(uiState = WeatherUiState.Success(previewCloudyWeather, fetchedAt = 1732123456000L), onRetry = {})
+        WeatherScreen(uiState = WeatherUiState.Success(previewCloudyWeather, fetchedAt = 1732123456000L), onRetry = {}, onCitySelected = {})
     }
 }
 
@@ -332,6 +386,6 @@ private fun WeatherScreenCloudyPreview() {
 @Composable
 private fun WeatherScreenErrorPreview() {
     NewYorkWeatherTheme(dynamicColor = false) {
-        WeatherScreen(uiState = WeatherUiState.Error(WeatherError.NETWORK), onRetry = {})
+        WeatherScreen(uiState = WeatherError.NETWORK.let { WeatherUiState.Error(it) }, onRetry = {}, onCitySelected = {})
     }
 }

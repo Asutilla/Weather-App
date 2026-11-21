@@ -1,4 +1,4 @@
-# New York Weather
+# Weather App
 
 A modern Android weather app built with Jetpack Compose and Material 3. It displays real-time weather conditions for New York City using the [OpenWeatherMap](https://openweathermap.org/api) API.
 

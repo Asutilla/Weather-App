@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">New York Weather</string>
+    <string name="app_name">Weather App</string>
     <string name="retry">Try again</string>
     <string name="updated_at">Updated %1$s</string>
     <string name="weather_icon">Current weather icon</string>
