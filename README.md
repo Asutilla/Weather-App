@@ -1,0 +1,77 @@
+# New York Weather
+
+A small Android weather app built with Jetpack Compose. It shows the current
+conditions and a short forecast for New York City using the
+[OpenWeatherMap](https://openweathermap.org/api) API.
+
+## Features
+
+- Current temperature, condition, humidity and wind for New York City
+- Weather icon loaded over the network (Glide)
+- Loading, empty and error states, including missing/invalid API key messages
+- Material 3 theming
+
+## Tech stack
+
+| Layer | Library |
+|-------|---------|
+| UI | Jetpack Compose + Material 3 |
+| State | ViewModel + `StateFlow` |
+| Networking | Retrofit + Moshi + OkHttp |
+| Images | Glide |
+| Build | Gradle (Kotlin DSL), AGP 9.5, Kotlin 2.2 |
+
+`minSdk` 24, `targetSdk` 37.
+
+## Getting started
+
+### 1. Requirements
+
+- Android Studio (latest stable) with JDK 17+
+- An OpenWeatherMap API key ([get one free](https://home.openweathermap.org/api_keys))
+
+### 2. Configure the API key
+
+The key is never committed. Add it to `local.properties` in the project root:
+
+```properties
+sdk.dir=C\:\\Users\\<you>\\AppData\\Local\\Android\\Sdk
+OPENWEATHER_API_KEY=your-key-here
+```
+
+`local.properties` is listed in `.gitignore` and must stay out of version
+control. Alternatively export `OPENWEATHER_API_KEY` as an environment variable
+before building.
+
+### 3. Build and run
+
+```bash
+# Windows
+gradlew.bat assembleDebug
+
+# macOS / Linux
+./gradlew assembleDebug
+```
+
+Or open the project in Android Studio and press **Run**.
+
+### 4. Tests
+
+```bash
+gradlew.bat test
+```
+
+## Project layout
+
+```
+app/src/main/java/com/example/newyorkweather/
+├── MainActivity.kt
+├── data/          # Retrofit service and response models
+└── ui/            # Compose screen, theme, ViewModel and UI state
+```
+
+## Security notes
+
+- API keys live in `local.properties` or the environment, never in source.
+- If a key is ever committed by mistake, revoke it in the OpenWeatherMap
+  dashboard and issue a new one.
