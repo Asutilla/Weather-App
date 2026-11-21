@@ -1,31 +1,30 @@
 # New York Weather
 
-A small Android weather app built with Jetpack Compose. It shows the current
-conditions and a short forecast for New York City using the
-[OpenWeatherMap](https://openweathermap.org/api) API.
+A modern Android weather app built with Jetpack Compose and Material 3. It displays real-time weather conditions for New York City using the [OpenWeatherMap](https://openweathermap.org/api) API.
 
 ## Features
 
-- Current temperature, condition, humidity and wind for New York City
-- Weather icon loaded over the network (Glide)
-- Loading, empty and error states, including missing/invalid API key messages
-- Material 3 theming
+- **Real-Time Weather Data**: Displays current city name, main weather condition (e.g. Clear, Clouds, Rain), and detailed description (e.g. clear sky, broken clouds).
+- **Vibrant Weather Icons**: Network-loaded high-resolution weather graphics via Glide (`@4x` resolution) paired with clear Material Vector icon fallbacks (e.g. bright golden sun for clear day, crescent moon for clear night).
+- **Lifecycle-Aware Polling**: Auto-refreshes current weather every 60 seconds while the app is in the foreground and automatically pauses when stopped to conserve battery and API quota.
+- **Robust Error Handling**: Handles network disconnections, invalid/missing API keys (HTTP 401), missing city (HTTP 404), and server failures with user-friendly retry actions.
+- **Material 3 Design**: Supports edge-to-edge layout, dark teal theme styling, and Compose previews.
 
-## Tech stack
+## Tech Stack
 
-| Layer | Library |
-|-------|---------|
-| UI | Jetpack Compose + Material 3 |
-| State | ViewModel + `StateFlow` |
-| Networking | Retrofit + Moshi + OkHttp |
-| Images | Glide |
-| Build | Gradle (Kotlin DSL), AGP 9.5, Kotlin 2.2 |
+| Layer | Technology |
+|---|---|
+| **UI** | Jetpack Compose + Material 3 |
+| **Architecture** | ViewModel + `StateFlow` + Coroutines |
+| **Networking** | Retrofit 2.11 + Moshi 1.15 + OkHttp 4.12 |
+| **Image Loading** | Glide 4.16 |
+| **Build & Tooling** | Gradle (Kotlin DSL), AGP 9.5.2, Kotlin 2.2 |
 
-`minSdk` 24, `targetSdk` 37.
+* **Target SDK**: 37 | **Min SDK**: 24
 
-## Getting started
+## Getting Started
 
-### 1. Clone the repository
+### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/Asutilla/Weather-App.git
@@ -34,23 +33,28 @@ cd Weather-App
 
 ### 2. Requirements
 
-- Android Studio (latest stable) with JDK 17+
-- An OpenWeatherMap API key ([get one free](https://home.openweathermap.org/api_keys))
+- Android Studio (Ladybug or newer) with JDK 17+
+- An OpenWeatherMap API key ([Get a free key here](https://home.openweathermap.org/api_keys))
 
-### 3. Configure the API key
+### 3. Configure the API Key
 
-The key is never committed. Add it to `local.properties` in the project root:
+The API key is kept secure and out of version control. Add your key to `local.properties` in the project root:
 
 ```properties
-sdk.dir=C\:\\Users\\<you>\\AppData\\Local\\Android\\Sdk
-OPENWEATHER_API_KEY=your-key-here
+OPENWEATHER_API_KEY=your-actual-api-key-here
 ```
 
-`local.properties` is listed in `.gitignore` and must stay out of version
-control. Alternatively export `OPENWEATHER_API_KEY` as an environment variable
-before building.
+`local.properties` is listed in `.gitignore`. Alternatively, export `OPENWEATHER_API_KEY` as an environment variable before building:
 
-### 4. Build and run
+```bash
+# Windows (PowerShell)
+$env:OPENWEATHER_API_KEY="your-actual-api-key-here"
+
+# macOS / Linux
+export OPENWEATHER_API_KEY="your-actual-api-key-here"
+```
+
+### 4. Build and Run
 
 ```bash
 # Windows
@@ -60,32 +64,37 @@ gradlew.bat assembleDebug
 ./gradlew assembleDebug
 ```
 
-Or open the project in Android Studio and press **Run**.
+Or open the project in Android Studio and click **Run** (Shift+F10).
 
-### 5. Tests
+### 5. Run Unit Tests
 
 ```bash
+# Windows
 gradlew.bat test
+
+# macOS / Linux
+./gradlew test
 ```
 
-## Project layout
+## Project Layout
 
 ```
 app/src/main/java/com/example/newyorkweather/
-├── MainActivity.kt
-├── data/          # Retrofit service and response models
-└── ui/            # Compose screen, theme, ViewModel and UI state
+├── MainActivity.kt          # Edge-to-edge Activity & foreground polling setup
+├── data/
+│   ├── WeatherApi.kt        # Retrofit interface & WeatherApiClient singleton
+│   └── WeatherResponse.kt   # Moshi JSON data models (WeatherResponse, Weather, Main, Coord)
+└── ui/
+    ├── WeatherScreen.kt     # Compose screen UI & WeatherIcon (Glide + vector fallback)
+    ├── WeatherUiState.kt    # UI State definition & WeatherError enum
+    ├── WeatherViewModel.kt  # StateFlow management & polling loop
+    └── theme/               # Material 3 colors, typography & theme definitions
 ```
 
-## Security
+## Security & Secrets
 
-- API keys live in `local.properties` or the `OPENWEATHER_API_KEY` environment
-  variable, never in source or in the repository.
-- Never commit `local.properties`, `.env*`, or signing material — they are
-  listed in `.gitignore`.
-- If a key is exposed, revoke it at
-  [home.openweathermap.org/api_keys](https://home.openweathermap.org/api_keys)
-  and issue a new one; removing the file is not enough.
+- API keys are injected via `local.properties` or environment variables at build time and injected into `BuildConfig.OPENWEATHER_API_KEY`.
+- Never commit `local.properties`, `.env` files, or signing keys to Git.
+- If an API key is accidentally exposed, revoke it immediately at [home.openweathermap.org/api_keys](https://home.openweathermap.org/api_keys).
 
-See [SECURITY.md](SECURITY.md) for the full policy, the key-rotation procedure,
-and the recommended GitHub secret-scanning settings.
+For further details on security guidelines and secret scanning, see [SECURITY.md](SECURITY.md).
