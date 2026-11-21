@@ -25,12 +25,19 @@ conditions and a short forecast for New York City using the
 
 ## Getting started
 
-### 1. Requirements
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/Asutilla/Weather-App.git
+cd Weather-App
+```
+
+### 2. Requirements
 
 - Android Studio (latest stable) with JDK 17+
 - An OpenWeatherMap API key ([get one free](https://home.openweathermap.org/api_keys))
 
-### 2. Configure the API key
+### 3. Configure the API key
 
 The key is never committed. Add it to `local.properties` in the project root:
 
@@ -43,7 +50,7 @@ OPENWEATHER_API_KEY=your-key-here
 control. Alternatively export `OPENWEATHER_API_KEY` as an environment variable
 before building.
 
-### 3. Build and run
+### 4. Build and run
 
 ```bash
 # Windows
@@ -55,7 +62,7 @@ gradlew.bat assembleDebug
 
 Or open the project in Android Studio and press **Run**.
 
-### 4. Tests
+### 5. Tests
 
 ```bash
 gradlew.bat test
