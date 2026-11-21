@@ -77,8 +77,15 @@ app/src/main/java/com/example/newyorkweather/
 └── ui/            # Compose screen, theme, ViewModel and UI state
 ```
 
-## Security notes
+## Security
 
-- API keys live in `local.properties` or the environment, never in source.
-- If a key is ever committed by mistake, revoke it in the OpenWeatherMap
-  dashboard and issue a new one.
+- API keys live in `local.properties` or the `OPENWEATHER_API_KEY` environment
+  variable, never in source or in the repository.
+- Never commit `local.properties`, `.env*`, or signing material — they are
+  listed in `.gitignore`.
+- If a key is exposed, revoke it at
+  [home.openweathermap.org/api_keys](https://home.openweathermap.org/api_keys)
+  and issue a new one; removing the file is not enough.
+
+See [SECURITY.md](SECURITY.md) for the full policy, the key-rotation procedure,
+and the recommended GitHub secret-scanning settings.
